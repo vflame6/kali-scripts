@@ -27,4 +27,4 @@ echo "Ports found:
 $ports
 "
 filename="$1_scan" 
-sudo nmap -p$ports -sU -sT -T4 $PN -sC -sV -oA $filename --stylesheet https://raw.githubusercontent.com/honze-net/nmap-bootstrap-xsl/master/nmap-bootstrap.xsl $1
+sudo nmap -p$ports -sU -sT -T4 $PN --open -sC -sV -oA $filename --stylesheet https://raw.githubusercontent.com/honze-net/nmap-bootstrap-xsl/master/nmap-bootstrap.xsl $1
