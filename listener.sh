@@ -2,6 +2,9 @@
 #
 # This is a bash script to quickly set up a netcat listener with random port
 # The port is in range 4000-10000
+# 
+# Usage:
+# $ ./listener.sh
 
 while
   port=$(shuf -n 1 -i 4000-10000)

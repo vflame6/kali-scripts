@@ -4,6 +4,9 @@
 # It runs nmap 2 times:
 # First to get all ports on the machine
 # Second for deeper scan of the ports found
+#
+# Usage:
+# $ ./fnmap.sh ip/hostname
 
 if [[ $# != 1 ]]
 then

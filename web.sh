@@ -3,6 +3,9 @@
 # This is a bash script for quickly setting up a web server.
 # It generates a random not busy port and setting up a Python web server
 # Also, it enumerates all network interfaces to format the http links to that web server with the port
+#
+# Usage:
+# ./web.sh
 
 while
   port=$(shuf -n 1 -i 4000-10000)
