@@ -4,6 +4,7 @@
 # It runs nmap 2 times:
 # First to get all ports on the machine
 # Second for deeper scan of the ports found
+# Used with nmap-bootstrap https://github.com/honze-net/nmap-bootstrap-xsl
 #
 # Usage:
 # $ ./fnmap.sh ip/hostname
