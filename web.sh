@@ -32,7 +32,12 @@ echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Starting web server on port $port"
 while read -r interface address
 do
   addr=$(echo $address | cut -d '/' -f 1)  
-  echo "    $interface: http://$addr:$port/"
+  if [[ $port -eq 80 ]]
+  then
+    echo "    $interface: http://$addr/"
+  else
+    echo "    $interface: http://$addr:$port/"
+  fi
 done < <(ip -o a show | cut -d ' ' -f 2,7 | grep -v '::')
 
 python3 -m http.server $port > /dev/null
