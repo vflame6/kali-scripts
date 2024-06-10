@@ -30,4 +30,4 @@ echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Starting netcat listener on $port"
 echo "python -c 'import pty; pty.spawn(\"/bin/bash\")'" 
 echo "python3 -c 'import pty; pty.spawn(\"/bin/bash\")'" 
 
-nc -lnvp $port
+sudo nc -lnvp $port

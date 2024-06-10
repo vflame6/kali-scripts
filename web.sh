@@ -40,4 +40,4 @@ do
   fi
 done < <(ip -o a show | cut -d ' ' -f 2,7 | grep -v '::')
 
-python3 -m http.server $port > /dev/null
+sudo python3 -m http.server $port > /dev/null

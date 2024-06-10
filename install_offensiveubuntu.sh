@@ -17,7 +17,9 @@ sudo apt -y autoremove
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing packages"
 sudo apt-get install -y open-vm-tools open-vm-tools-desktop
-sudo apt install -y vim wget curl git clipman xfce4-clipman-plugin unzip xclip apache2 postgresql
+sudo apt install -y vim wget curl git unzip pv
+sudo apt install -y apache2 postgresql tmux openvpn
+sudo apt install -y clipman xfce4-clipman-plugin xclip
 sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev python3 python3-pip
 sudo apt install -y pipx && pipx ensurepath && sudo pipx ensurepath --global
 
@@ -32,7 +34,6 @@ curl -fsSL https://debian.neo4j.com/neotechnology.gpg.key | sudo gpg --dearmor -
 echo "deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable latest" | sudo tee -a /etc/apt/sources.list.d/neo4j.list
 sudo apt-get update
 sudo apt-get install neo4j -y
-
 
 wget https://go.dev/dl/go1.21.11.linux-amd64.tar.gz
 rm -rf /usr/local/go && tar -C /usr/local -xzf go1.21.11.linux-amd64.tar.gz
@@ -53,6 +54,8 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo groupadd docker
+sudo usermod -aG docker $SUDO_USER
 
 # DOCKER CONTAINERS
 
@@ -68,20 +71,22 @@ go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 go get github.com/ropnop/kerbrute
 
-wget https://github.com/BloodHoundAD/BloodHound/releases/download/v4.3.1/BloodHound-linux-x64.zip
-unzip BloodHound-linux-x64.zip
+wget https://github.com/BloodHoundAD/BloodHound/releases/download/v4.3.1/BloodHound-linux-x64.zip \ 
+  && unzip BloodHound-linux-x64.zip | pv -l >/dev/null \
+  && rm -f BloodHound-linux-x64.zip
 
 mkdir -p /opt/wordlists
 curl -fsSL https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt -o /opt/wordlists/rockyou.txt
 cd /opt/wordlists/
 wget -c https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip \
-  && unzip SecList.zip \
+  && unzip SecList.zip | pv -l >/dev/null \
   && rm -f SecList.zip
 cd /opt/
 
 curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
   chmod 755 msfinstall && \
-  ./msfinstall
+  ./msfinstall && \
+  rm -f msfinstall
 curl https://sliver.sh/install|sudo bash
 
 # CONF FILES
@@ -95,29 +100,29 @@ chmod +x /opt/aliases/updatesys.sh
 sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/rev.sh -o /opt/aliases/rev.sh
 chmod +x /opt/aliases/rev.sh
 sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/fnmap.sh -o /opt/aliases/fnmap.sh
-chmod +x /opt/aliases fnmap.sh
+chmod +x /opt/aliases/fnmap.sh
 sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/web.sh -o /opt/aliases/web.sh
 chmod +x /opt/aliases/web.sh
 
-echo "#!/bin/bash" >> /etc/profile.d/offsensiveubuntu.sh
+echo >> /etc/bash.bashrc
+echo "bind 'set bell-style none'" >> /etc/bash.bashrc
+echo "alias grep='grep --color=auto'" >> /etc/bash.bashrc
+echo "alias ll='ls -lsah'" >> /etc/bash.bashrc
+echo "alias xclip='xclip -selection clipboard'" >> /etc/bash.bashrc
+echo "alias rev='/opt/aliases/rev.sh'" >> /etc/bash.bashrc
+echo "alias web=/opt/aliases/web.sh'" >> /etc/bash.bashrc
+echo "alias updatesys='/opt/aliases/updatesys.sh'" >> /etc/bash.bashrc
+echo "alias fnmap='/opt/aliases/fnmap.sh'" >> /etc/bash.bashrc
 
-echo "bind 'set bell-style none'" >> /etc/profile.d/offensiveubuntu.sh
+echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/bash.bashrc
+echo 'export PATH=$PATH:$HOME/go/bin' >> /etc/bash.bashrc
 
-echo "alias grep='grep --color=auto'" >> /etc/profile.d/offensiveubuntu.sh
-echo "alias ll='ls -lsah'" >> /etc/profile.d/offensiveubuntu.sh
-echo "alias xclip='xclip -selection clipboard'" >> /etc/profile.d/offensiveubuntu.sh
-echo "alias rev='~/aliases/rev.sh'" >> /etc/profile.d/offensiveubuntu.sh
-echo "alias web='~/aliases/web.sh'" >> /etc/profile.d/offensiveubuntu.sh
-echo "alias updatesys='~/aliases/updatesys.sh'" >> /etc/profile.d/offensiveubuntu.sh
-echo "alias fnmap='~/aliases/fnmap.sh'" >> /etc/profile.d/offensiveubuntu.sh
+## SERVICES
 
-echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/profile.d/offensiveubuntu.sh
-echo 'export PATH=$PATH:$HOME/go/bin' >> /etc/profile.d/offensiveubuntu.sh
-
-# POSTINSTALL
-
+systemctl stop cups && systemctl disable cups
 systemctl stop apache2 && systemctl disable apache2
 systemctl stop sliver && systemctl disable sliver
+systemctl stop postgresql && systemctl disable postgresql
 
 ## DONE
 
