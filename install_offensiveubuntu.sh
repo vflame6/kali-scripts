@@ -101,6 +101,8 @@ chmod +x /opt/aliases/web.sh
 
 echo "#!/bin/bash" >> /etc/profile.d/offsensiveubuntu.sh
 
+echo "bind 'set bell-style none'" >> /etc/profile.d/offensiveubuntu.sh
+
 echo "alias grep='grep --color=auto'" >> /etc/profile.d/offensiveubuntu.sh
 echo "alias ll='ls -lsah'" >> /etc/profile.d/offensiveubuntu.sh
 echo "alias xclip='xclip -selection clipboard'" >> /etc/profile.d/offensiveubuntu.sh
