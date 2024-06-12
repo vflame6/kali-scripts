@@ -1,5 +1,9 @@
 #!/bin/bash
 #
+# Bash script for automatic offensive tools installation and desktop configuration
+#
+# Tested on ubuntu 22.04.4 LTS
+#
 # usage: 
 # curl https://raw.githubusercontent.com/vflame6/kali-scripts/main/install_offensiveubuntu.sh|sudo bash
 
@@ -18,8 +22,8 @@ sudo apt -y autoremove
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing packages"
 sudo apt-get install -y open-vm-tools open-vm-tools-desktop
 sudo apt install -y vim wget curl git unzip pv
-sudo apt install -y apache2 postgresql tmux openvpn
-sudo apt install -y clipman xfce4-clipman-plugin xclip
+sudo apt install -y apache2 postgresql tmux openvpn samba smbclient
+sudo apt install -y clipman copyq
 sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev python3 python3-pip
 sudo apt install -y pipx && pipx ensurepath && sudo pipx ensurepath --global
 
@@ -92,6 +96,7 @@ curl https://sliver.sh/install|sudo bash
 # CONF FILES
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing configuration files"
+
 sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/vimrc_example -o /etc/vim/vimrc.local
 
 mkdir -p /opt/aliases
@@ -103,6 +108,9 @@ sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/fnma
 chmod +x /opt/aliases/fnmap.sh
 sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/web.sh -o /opt/aliases/web.sh
 chmod +x /opt/aliases/web.sh
+
+echo "vbell off" >> /home/$SUDO_USER/.screenrc
+echo "bell_msg \"\"" >> /home/$SUDO_USER/.screenrc
 
 echo >> /etc/bash.bashrc
 echo "bind 'set bell-style none'" >> /etc/bash.bashrc
@@ -119,10 +127,29 @@ echo 'export PATH=$PATH:$HOME/go/bin' >> /etc/bash.bashrc
 
 ## SERVICES
 
+echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Stopping services"
+
 systemctl stop cups && systemctl disable cups
 systemctl stop apache2 && systemctl disable apache2
 systemctl stop sliver && systemctl disable sliver
 systemctl stop postgresql && systemctl disable postgresql
+
+# UBUNTU CONFIGURATION
+
+echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Configuring Ubuntu native settings"
+
+dconf write /org/gnome/desktop/sound/event-sounds "false"
+sudo -u gdm gsettings set org.gnome.desktop.notifications show-banners false
+sudo -u gdm gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+sudo -u gdm gsettings set org.gnome.desktop.wm.preferences audible-bell false
+sudo -u gdm gsettings set org.gnome.desktop.wm.preferences visual-bell false
+
+if [ -f /usr/share/backgrounds/canvas_by_roytanck.jpg ]; then
+  sudo -u gdm gsettings set org.gnome.desktop.background picture-uri file:///usr/share/backgrounds/canvas_by_roytanck.jpg
+fi
+
+sudo -u $SUDO_USER copyq --start-server config autostart true
+sudo -u $SUDO_USER copyq config tray_items 10
 
 ## DONE
 
