@@ -2,7 +2,7 @@
 #
 # Bash script for automatic offensive tools installation and desktop configuration
 #
-# Tested on ubuntu 22.04.4 LTS
+# Tested on ubuntu 24.04 LTS
 #
 # usage: 
 # curl https://raw.githubusercontent.com/vflame6/kali-scripts/main/install_offensiveubuntu.sh|sudo bash
@@ -22,7 +22,7 @@ sudo apt -y autoremove
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing packages"
 sudo apt-get install -y open-vm-tools open-vm-tools-desktop
 sudo apt install -y vim wget curl git unzip pv
-sudo apt install -y apache2 postgresql tmux openvpn samba ssh
+sudo apt install -y apache2 postgresql tmux openvpn samba openssh-client openssh-server
 sudo apt install -y smbclient rdesktop freerdp2-x11
 sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev python3 python3-pip
 sudo apt install -y copyq
@@ -71,6 +71,7 @@ sudo docker pull python:2.7.18-stretch
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing tools"
 sudo pipx install git+https://github.com/Pennyw0rth/NetExec
+sudo pipx install impacket
 
 go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
@@ -92,6 +93,7 @@ curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/t
   chmod 755 msfinstall && \
   ./msfinstall && \
   rm -f msfinstall
+
 curl https://sliver.sh/install|sudo bash
 
 # CONF FILES
@@ -126,6 +128,8 @@ echo "alias fnmap='/opt/aliases/fnmap.sh'" >> /etc/bash.bashrc
 echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/bash.bashrc
 echo 'export PATH=$PATH:$HOME/go/bin' >> /etc/bash.bashrc
 
+echo 'eval "$(register-python-argcomplete pipx)"' >> /etc/bash.bashrc
+
 ## SERVICES
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Stopping services"
@@ -134,7 +138,7 @@ systemctl stop cups && systemctl disable cups
 systemctl stop apache2 && systemctl disable apache2
 systemctl stop sliver && systemctl disable sliver
 systemctl stop postgresql && systemctl disable postgresql
-systemctl stop sshd && systemctl disable sshd
+systemctl stop ssh && systemctl disable ssh
 
 # UBUNTU CONFIGURATION
 
@@ -161,4 +165,4 @@ sudo -u $SUDO_USER copyq config tray_items 10
 
 ## DONE
 
-echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Done"
+echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Done. Reboot to continue"
