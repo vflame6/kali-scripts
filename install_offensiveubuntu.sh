@@ -22,9 +22,10 @@ sudo apt -y autoremove
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing packages"
 sudo apt-get install -y open-vm-tools open-vm-tools-desktop
 sudo apt install -y vim wget curl git unzip pv
-sudo apt install -y apache2 postgresql tmux openvpn samba smbclient
-sudo apt install -y clipman copyq
+sudo apt install -y apache2 postgresql tmux openvpn samba ssh
+sudo apt install -y smbclient rdesktop freerdp2-x11
 sudo apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev python3 python3-pip
+sudo apt install -y copyq
 sudo apt install -y pipx && pipx ensurepath && sudo pipx ensurepath --global
 
 wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
@@ -133,6 +134,7 @@ systemctl stop cups && systemctl disable cups
 systemctl stop apache2 && systemctl disable apache2
 systemctl stop sliver && systemctl disable sliver
 systemctl stop postgresql && systemctl disable postgresql
+systemctl stop sshd && systemctl disable sshd
 
 # UBUNTU CONFIGURATION
 
@@ -143,6 +145,12 @@ sudo -u gdm gsettings set org.gnome.desktop.notifications show-banners false
 sudo -u gdm gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 sudo -u gdm gsettings set org.gnome.desktop.wm.preferences audible-bell false
 sudo -u gdm gsettings set org.gnome.desktop.wm.preferences visual-bell false
+sudo -u gdm gsettings set org.gnome.desktop.interface toolbar-icons-size 'small'
+sudo -u gdm gsettings set org.gnome.shell.extensions.ding icon-size 'small'
+sudo -u gdm gsettings set org.gnome.shell.extensions.dash-to-dock autohide true
+sudo -u gdm gsettings set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM'
+sudo -u gdm gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
+sudo -u gdm gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false
 
 if [ -f /usr/share/backgrounds/canvas_by_roytanck.jpg ]; then
   sudo -u gdm gsettings set org.gnome.desktop.background picture-uri file:///usr/share/backgrounds/canvas_by_roytanck.jpg
