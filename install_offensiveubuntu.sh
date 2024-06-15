@@ -21,11 +21,11 @@ echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Updating packages"
 sudo add-apt-repository ppa:oibaf/graphics-drivers
 
 sudo apt update
-sudo apt -y full-upgrade
+sudo apt -y upgrade
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing packages"
 
-sudo apt-get install -y open-vm-tools open-vm-tools-desktop
+sudo apt install -y open-vm-tools open-vm-tools-desktop
 sudo apt install -y vim wget curl git unzip
 sudo apt install -y apache2 postgresql tmux openvpn samba
 sudo apt install -y smbclient rdesktop freerdp2-x11
@@ -115,7 +115,6 @@ sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/web.
 chmod +x /opt/aliases/web.sh
 
 echo >> /etc/bash.bashrc
-echo "bind 'set bell-style none'" >> /etc/bash.bashrc
 echo "alias grep='grep --color=auto'" >> /etc/bash.bashrc
 echo "alias ll='ls -lsah'" >> /etc/bash.bashrc
 echo "alias rev='/opt/aliases/rev.sh'" >> /etc/bash.bashrc
@@ -126,20 +125,24 @@ echo "alias fnmap='/opt/aliases/fnmap.sh'" >> /etc/bash.bashrc
 echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/bash.bashrc
 echo 'export PATH=$PATH:$HOME/go/bin' >> /etc/bash.bashrc
 
+echo 'export PYTHONWARNINGS=ignore' >> /etc/bash.bashrc
+
 echo 'eval "$(register-python-argcomplete pipx)"' >> /etc/bash.bashrc
 
 ## SERVICES
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Stopping services"
 
-systemctl stop cups && systemctl disable cups
 systemctl stop apache2 && systemctl disable apache2
-systemctl stop sliver && systemctl disable sliver
 systemctl stop postgresql && systemctl disable postgresql
+systemctl stop smbd && systemctl disable smbd
 
 sudo -u $SUDO_USER copyq --start-server config autostart true
 sudo -u $SUDO_USER copyq config tray_items 10
 
 ## DONE
+
+sudo apt autoremove
+sudo apt clean
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Done. Reboot to continue"
