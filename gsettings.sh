@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# This is a script for configuring ubuntu's Gnome desktop
+# Needs to be run as current user in desktop session
+#
 
 NOCOLOR="\e[0m"
 LIGHT_BLUE="\e[36m"
