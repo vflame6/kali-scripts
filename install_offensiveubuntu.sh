@@ -127,8 +127,6 @@ echo 'export PATH=$PATH:$HOME/go/bin' >> /etc/bash.bashrc
 
 echo 'export PYTHONWARNINGS=ignore' >> /etc/bash.bashrc
 
-echo 'eval "$(register-python-argcomplete pipx)"' >> /etc/bash.bashrc
-
 ## SERVICES
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Stopping services"
