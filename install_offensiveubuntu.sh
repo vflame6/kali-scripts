@@ -26,11 +26,16 @@ sudo apt -y upgrade
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing packages"
 
 sudo apt install -y open-vm-tools open-vm-tools-desktop
-sudo apt install -y vim wget curl git unzip
-sudo apt install -y apache2 postgresql tmux openvpn samba
-sudo apt install -y smbclient rdesktop freerdp2-x11
+sudo apt install -y wget curl git unzip gzip bzip2 tar
+sudo apt install -y apache2 postgresql tmux openvpn proxychains
+sudo apt install -y samba smbclient rdesktop freerdp2-x11
 sudo apt install -y python3 python3-pip
-sudo apt install -y copyq
+sudo apt install -y vim vim-gtk3 wl-clipboard gnome-shell-extension-manager
+sudo apt install -y nmap masscan
+
+sudo apt install -y wireshark
+sudo groupadd wireshark
+sudo usermod -aG wireshark $SUDO_USER
 
 sudo apt install -y pipx
 sudo pipx ensurepath
@@ -76,33 +81,47 @@ sudo docker pull python:2.7.18-stretch
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing tools"
 
-sudo -u $SUDO_USER pipx install git+https://github.com/Pennyw0rth/NetExec
-sudo -u $SUDO_USER pipx install impacket
+curl https://i.jpillora.com/chisel! | sudo bash
 
-sudo -u $SUDO_USER pip3 install impacket
+sudo -u $SUDO_USER pipx install git+https://github.com/Pennyw0rth/NetExec
+
+sudo pip3 install impacket --break-system-packages
 
 go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-go get github.com/ropnop/kerbrute
+go install github.com/ropnop/kerbrute@latest
 
 wget https://github.com/BloodHoundAD/BloodHound/releases/download/v4.3.1/BloodHound-linux-x64.zip
 unzip BloodHound-linux-x64.zip
 rm -f BloodHound-linux-x64.zip
 
 mkdir -p /opt/wordlists
-curl -fsSL https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt -o /opt/wordlists/rockyou.txt
-cd /opt/wordlists/
+cd /opt/wordlists
+if [ ! -f /opt/wordlists/rockyou.txt ]; then
+  curl -fsSL https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt -o rockyou.txt
+fi
+if [ ! -d /opt/wordlists/SecList ]; then
+  wget -c https://github.com/danielmiessler/SecLists/archive/master.zip -O SecList.zip
+  unzip SecList.zip
+  rm -f SecList.zip
+fi
+cd /opt
 
 curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
   chmod 755 msfinstall && \
   ./msfinstall && \
   rm -f msfinstall
 
+mkdir /opt/certificates
+
 # CONF FILES
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing configuration files"
 
 sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/vimrc_example -o /etc/vim/vimrc.local
+
+sudo -u $SUDO_USER git clone https://github.com/gpakosz/.tmux.git /home/$SUDO_USER/
+sudo -u $SUDO_USER 'cd /home/$SUDO_USER && ln -s -f.tmux/.tmux.conf && cp .tmux/.tmux.conf.local .'
 
 mkdir -p /opt/aliases
 sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/updatesys.sh -o /opt/aliases/updatesys.sh
@@ -121,10 +140,8 @@ echo "alias rev='/opt/aliases/rev.sh'" >> /etc/bash.bashrc
 echo "alias web='/opt/aliases/web.sh'" >> /etc/bash.bashrc
 echo "alias updatesys='/opt/aliases/updatesys.sh'" >> /etc/bash.bashrc
 echo "alias fnmap='/opt/aliases/fnmap.sh'" >> /etc/bash.bashrc
-
 echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/bash.bashrc
 echo 'export PATH=$PATH:$HOME/go/bin' >> /etc/bash.bashrc
-
 echo 'export PYTHONWARNINGS=ignore' >> /etc/bash.bashrc
 
 ## SERVICES
@@ -134,9 +151,7 @@ echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Stopping services"
 systemctl stop apache2 && systemctl disable apache2
 systemctl stop postgresql && systemctl disable postgresql
 systemctl stop smbd && systemctl disable smbd
-
-sudo -u $SUDO_USER copyq --start-server config autostart true
-sudo -u $SUDO_USER copyq config tray_items 10
+systemctl stop nmbd && systemctl disable nmbd
 
 ## DONE
 
@@ -144,3 +159,4 @@ sudo apt autoremove
 sudo apt clean
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Done. Reboot to continue"
+echo -e "${LIGHT_BLUE}[*]${NOCOLOR} You can install Clipboard Indicator with Extension Manager"
