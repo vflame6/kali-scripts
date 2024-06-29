@@ -17,6 +17,10 @@ cd /opt/
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Updating packages"
 
+# disable automatic updates
+sudo apt remove unattended-upgrades
+sudo apt remove update-notifier
+
 # resolve graphics problem
 sudo add-apt-repository ppa:oibaf/graphics-drivers
 
@@ -27,7 +31,7 @@ echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing packages"
 
 sudo apt install -y open-vm-tools open-vm-tools-desktop
 sudo apt install -y wget curl git unzip gzip bzip2 tar
-sudo apt install -y apache2 postgresql tmux openvpn proxychains
+sudo apt install -y apache2 postgresql tmux openvpn proxychains4 net-tools
 sudo apt install -y samba smbclient rdesktop freerdp2-x11
 sudo apt install -y python3 python3-pip
 sudo apt install -y vim vim-gtk3 wl-clipboard gnome-shell-extension-manager
@@ -40,6 +44,8 @@ sudo usermod -aG wireshark $SUDO_USER
 sudo apt install -y pipx
 sudo pipx ensurepath
 sudo -u $SUDO_USER pipx ensurepath
+
+sudo apt install -y sqlmap
 
 sudo apt-get install -y openjdk-11-jdk apt-transport-https
 sudo apt-get install wget curl nano software-properties-common dirmngr apt-transport-https gnupg gnupg2 ca-certificates lsb-release ubuntu-keyring unzip -y
@@ -81,8 +87,11 @@ sudo docker pull python:2.7.18-stretch
 
 echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing tools"
 
+sudo snap install --classic code
+
 curl https://i.jpillora.com/chisel! | sudo bash
 
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 sudo -u $SUDO_USER pipx install git+https://github.com/Pennyw0rth/NetExec
 
 sudo pip3 install impacket --break-system-packages
