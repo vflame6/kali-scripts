@@ -35,7 +35,9 @@ sudo apt install -y apache2 postgresql tmux openvpn proxychains4 net-tools
 sudo apt install -y samba smbclient rdesktop freerdp2-x11
 sudo apt install -y python3 python3-pip
 sudo apt install -y vim vim-gtk3 wl-clipboard gnome-shell-extension-manager
+sudo apt install -y ansible-core
 sudo apt install -y nmap masscan
+sudo apt install -y john hashcat
 
 sudo apt install -y wireshark
 sudo groupadd wireshark
