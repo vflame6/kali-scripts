@@ -31,7 +31,7 @@ echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing packages"
 
 sudo apt install -y open-vm-tools open-vm-tools-desktop
 sudo apt install -y wget curl git unzip gzip bzip2 tar
-sudo apt install -y apache2 postgresql tmux openvpn proxychains4 net-tools
+sudo apt install -y apache2 postgresql tmux openvpn proxychains4 net-tools swaks
 sudo apt install -y samba smbclient rdesktop freerdp2-x11
 sudo apt install -y python3 python3-pip
 sudo apt install -y vim vim-gtk3 wl-clipboard gnome-shell-extension-manager
