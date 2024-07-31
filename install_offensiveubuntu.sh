@@ -132,7 +132,7 @@ echo -e "${LIGHT_BLUE}[*]${NOCOLOR} Installing configuration files"
 sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/vimrc_example -o /etc/vim/vimrc.local
 
 sudo -u $SUDO_USER git clone https://github.com/gpakosz/.tmux.git /home/$SUDO_USER/
-sudo -u $SUDO_USER 'cd /home/$SUDO_USER && ln -s -f.tmux/.tmux.conf && cp .tmux/.tmux.conf.local .'
+sudo -u $SUDO_USER 'cd /home/$SUDO_USER && ln -s -f .tmux/.tmux.conf && cp .tmux/.tmux.conf.local .'
 
 mkdir -p /opt/aliases
 sudo curl -fsSL https://raw.githubusercontent.com/vflame6/kali-scripts/main/updatesys.sh -o /opt/aliases/updatesys.sh
