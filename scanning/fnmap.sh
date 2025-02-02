@@ -30,4 +30,4 @@ $ports
 filename="$1_scan" 
 sudo mkdir nmap
 sudo nmap -p$ports $UDP -sS -T4 -Pn --open -sC -sV \
-    -oA "nmap/$filename" --stylesheet https://raw.githubusercontent.com/honze-net/nmap-bootstrap-xsl/master/nmap-bootstrap.xsl $1
+    -oA "nmap/$filename" $1
