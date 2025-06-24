@@ -27,3 +27,16 @@ function extract {
     fi
   fi
 }
+
+alias ll='ls -lsah'
+alias rev='/opt/aliases/rev.sh'
+alias web='/opt/aliases/web.sh'
+alias updatesys='/opt/aliases/updatesys.sh'
+alias fnmap='/opt/aliases/fnmap.sh'
+
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/go/bin
+
+export EDITOR=vim
+export VISUAL=$EDITOR
+export PYTHONWARNINGS=ignore
