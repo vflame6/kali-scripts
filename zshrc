@@ -34,6 +34,12 @@ alias web='/opt/aliases/web.sh'
 alias updatesys='/opt/aliases/updatesys.sh'
 alias fnmap='/opt/aliases/fnmap.sh'
 
+export AGENT='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+alias wget="wget -U '$AGENT'"
+alias nmap="nmap --script-args=\"http.useragent='$AGENT'\""
+alias curl="curl -A '$AGENT'"
+alias trufflehog='trufflehog --log-level=-1 --no-verification'
+
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$HOME/go/bin
 
