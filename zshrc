@@ -29,6 +29,8 @@ function extract {
 }
 
 alias ll='ls -lsah'
+alias xclip='xclip -selection clipboard'
+
 alias rev='/opt/aliases/rev.sh'
 alias web='/opt/aliases/web.sh'
 alias updatesys='/opt/aliases/updatesys.sh'
